@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:task/view/pages/home_page.dart';
+import 'package:provider/provider.dart';
+import 'package:task/controller/provider/login_provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -10,19 +11,28 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController numberController = TextEditingController();
+  final TextEditingController codeController = TextEditingController();
   final fkey = GlobalKey<FormState>();
+  // @override
+  // void initState() {
+  //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+  //     Provider.of<LoginProvider>(context, listen: false);
+  //   });
+  //   super.initState();
+  // }
 
   @override
   void dispose() {
     numberController.dispose();
+    codeController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child: Padding(
+    return Consumer<LoginProvider>(
+      builder: (context, value, child) => Scaffold(
+        body: Padding(
           padding: const EdgeInsets.only(left: 20.0, top: 50, right: 10),
           child: SingleChildScrollView(
             child: Column(
@@ -35,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 const Text(
@@ -45,100 +55,104 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(
                   height: 30,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 60,
+                Form(
+                  key: fkey,
+                  child: Row(children: [
+                    SizedBox(
+                      height: 80,
                       width: 80,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const SizedBox(
-                            width: 10,
+                      child: TextFormField(
+                        controller: numberController,
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 12),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "code is empty";
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText: 'code',
+                          hintStyle:
+                              const TextStyle(color: Colors.grey, fontSize: 10),
+                          contentPadding: const EdgeInsets.all(10),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: const BorderSide(
+                              color: Colors.grey,
+                            ),
                           ),
-                          const Text(
-                            '+91',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 12),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: const BorderSide(
+                              color: Colors.red,
+                            ),
                           ),
-                          Flexible(
-                            child: IconButton(
-                                onPressed: () {},
-                                icon: const Icon(
-                                  Icons.arrow_drop_down,
-                                  color: Colors.white,
-                                )),
-                          )
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Flexible(
-                      child: Form(
-                        key: fkey,
-                        child: TextFormField(
-                          controller: numberController,
-                          style: TextStyle(color: Colors.white, fontSize: 12),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter a number';
-                            }
-                            if (value == '8129466718') {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => HomePage()),
-                              );
-
-                              return null;
-                            } else {
-                              return 'Please enter a valid number';
-                            }
-                          },
-                          decoration: InputDecoration(
-                            hintText: 'Enter Mobile Number',
-                            hintStyle: const TextStyle(
-                                color: Colors.grey, fontSize: 10),
-                            contentPadding: const EdgeInsets.all(15),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              borderSide: const BorderSide(
-                                color: Colors.grey,
-                              ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: const BorderSide(
+                              color: Colors.grey,
                             ),
-                            focusedErrorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              borderSide: const BorderSide(
-                                color: Colors.red,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              borderSide: const BorderSide(
-                                color: Colors.grey,
-                              ),
-                            ),
-                            errorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              borderSide: const BorderSide(
-                                color: Colors.red,
-                              ),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: const BorderSide(
+                              color: Colors.red,
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ],
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Container(
+                      height: 80,
+                      width: 230,
+                      child: TextFormField(
+                        controller: codeController,
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 12),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "number is empty";
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText: 'Enter your number',
+                          // contentPadding: EdgeInsets.all(10),
+                          hintStyle:
+                              const TextStyle(color: Colors.grey, fontSize: 10),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: const BorderSide(
+                              color: Colors.grey,
+                            ),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: const BorderSide(
+                              color: Colors.red,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: const BorderSide(
+                              color: Colors.grey,
+                            ),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: const BorderSide(
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                        maxLength: 10,
+                      ),
+                    ),
+                  ]),
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.4,
@@ -164,25 +178,25 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: () {
+                          onTap: () async {
                             if (fkey.currentState!.validate()) {
-                              MaterialPageRoute(
-                                builder: (context) => HomePage(),
-                              );
+                              value.loginData(context,
+                                  country_code: codeController.text.trim(),
+                                  phone: numberController.text.trim());
                             }
                           },
                           child: Container(
                             height: 50,
                             width: 50,
+                            decoration: const BoxDecoration(
+                                color: Colors.red, shape: BoxShape.circle),
                             child: const Icon(
                               Icons.arrow_forward_ios,
                               color: Colors.white,
                               size: 18,
                             ),
-                            decoration: const BoxDecoration(
-                                color: Colors.red, shape: BoxShape.circle),
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),

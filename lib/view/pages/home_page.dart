@@ -38,52 +38,51 @@ class _HomePageState extends State<HomePage>
       child: SafeArea(
         child: Scaffold(
           body: SingleChildScrollView(
-            child: Container(
+            child: SizedBox(
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
               child: Column(children: [
                 appBarSection(),
                 Consumer<HomeProvider>(
-                  builder: (context, value, child) => Container(
-                    child: Column(
-                      children: [
-                        TabBar(
-                            isScrollable: true,
-                            dividerColor: Colors.black,
-                            labelColor: Colors.white,
-                            indicator: const BoxDecoration(color: Colors.black),
-                            unselectedLabelColor: Colors.grey,
-                            controller: tabController,
-                            tabs: [
-                              Tab(
-                                child: categoryList('Explore'),
-                              ),
-                              Tab(child: categoryList('Trending')),
-                              Tab(child: categoryList('AllCategories')),
-                            ]),
-                        SizedBox(
-                            height: 500,
-                            child: TabBarView(
-                                controller: tabController,
-                                children: [
-                                  ListView.builder(
-                                      itemCount: value.resultList!.length,
-                                      itemBuilder: (context, index) {
-                                        return ExploreTile(
-                                          result: value.resultList![index],
-                                        );
-                                      }),
-                                  const Text(
-                                    'trending',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  const Text(
-                                    'All Categories',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ]))
-                      ],
-                    ),
+                  builder: (context, value, child) => Column(
+                    children: [
+                      TabBar(
+                          isScrollable: true,
+                          dividerColor: Colors.black,
+                          labelColor: Colors.white,
+                          indicator: const BoxDecoration(color: Colors.black),
+                          unselectedLabelColor: Colors.grey,
+                          controller: tabController,
+                          tabs: [
+                            Tab(
+                              child: categoryList('Explore'),
+                            ),
+                            Tab(child: categoryList('Trending')),
+                            Tab(
+                              child: categoryList('AllCategories'),
+                            ),
+                          ]),
+                      SizedBox(
+                        height: 500,
+                        child: TabBarView(controller: tabController, children: [
+                          ListView.builder(
+                              itemCount: value.resultList!.length,
+                              itemBuilder: (context, index) {
+                                return ExploreTile(
+                                  result: value.resultList![index],
+                                );
+                              }),
+                          const Text(
+                            'trending',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          const Text(
+                            'All Categories',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ]),
+                      ),
+                    ],
                   ),
                 )
               ]),
@@ -91,7 +90,10 @@ class _HomePageState extends State<HomePage>
           ),
           floatingActionButton: FloatingActionButton(
             shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(50))),
+              borderRadius: BorderRadius.all(
+                Radius.circular(50),
+              ),
+            ),
             foregroundColor: Colors.white,
             backgroundColor: Colors.red,
             onPressed: () {
