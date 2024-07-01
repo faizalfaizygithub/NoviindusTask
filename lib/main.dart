@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task/controller/provider/home_provider.dart';
 import 'package:task/controller/provider/login_provider.dart';
 import 'package:task/view/pages/auth_page.dart';
-import 'package:task/view/widgets/secrets.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  SharedPreferences pref = await SharedPreferences.getInstance();
-  Secrets.token = pref.getString('token') ?? '';
+ void main() {
   runApp(const MyApp());
 }
 
@@ -21,9 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (context) => HomeProvider(),
-        ),
+        ChangeNotifierProvider(create: (context) => HomeProvider()),
         ChangeNotifierProvider(create: (context) => LoginProvider())
       ],
       child: MaterialApp(
@@ -34,7 +27,7 @@ class MyApp extends StatelessWidget {
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             useMaterial3: true,
           ),
-          home: LoginPage()),
+          home: const LoginPage()),
     );
   }
 }
